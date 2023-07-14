@@ -1,0 +1,33 @@
+// style模块DSL
+const StyleDSL = {
+  styles: [
+    `.page {
+      padding: 0px;
+    }`
+  ]// 重新组装vue代码
+const VueTemplate = (renderData) => `
+  <template>
+    ${renderData.template}
+  </template>
+
+  <script>
+    ${renderData.imports.join(';\n')};
+
+    export default {
+      data() {
+        return ${JSON.stringify(renderData.data, null, 2)}
+      },${
+      renderData.lifeCycles.length
+      ? renderData.lifeCycles.join(',\n') + ','
+      : ''
+      }
+      methods: {
+        ${renderData.methods.join(',\n')}
+      }
+    }
+  </script>
+
+  <style lang="scss" scoped>
+    ${renderData.styles.join('\n')}
+  </style>
+`
